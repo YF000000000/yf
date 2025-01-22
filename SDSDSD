@@ -1,0 +1,141 @@
+local NoHyper = loadstring(game:HttpGet("https://raw.githubusercontent.com/AWDX-DYVB/River-UI/main/River%20UI%E6%BA%90%E7%A0%81.lua"))()
+local Window = NoHyper.new("SD " .. game.Players.LocalPlayer.DisplayName, "rbxassetid://13169991903", "欢迎使用")
+Window:NewSize(UDim2.new(0.1, 430, 0.1, 300))
+local isFixedCameraActive = false
+local fixedCFrame
+
+local function onToggleValueChanged(value)
+    isFixedCameraActive = value
+    workspace.CurrentCamera.CameraType = value and Enum.CameraType.Scriptable or Enum.CameraType.Custom
+    if value then
+        fixedCFrame = workspace.CurrentCamera.CFrame
+    end
+end
+
+local function updateFixedCamera()
+    if isFixedCameraActive and fixedCFrame then
+        workspace.CurrentCamera.CFrame = fixedCFrame
+    end
+end
+
+game:GetService("RunService").RenderStepped:Connect(updateFixedCamera)
+
+local player = game.Players.LocalPlayer
+player.CharacterAdded:Connect(function(character)
+    character:WaitForChild("Humanoid").Died:Connect(function() end)
+    wait(1) 
+    onToggleValueChanged(isFixedCameraActive)
+end)
+
+if player.Character then
+    onToggleValueChanged(isFixedCameraActive)
+end
+
+-- 创建标签（Tab）和功能区（Section）
+local PlayerLobby = Window:NewTab("主要", "earth")
+local SpeedJumpGravity = PlayerLobby:NewSection("锁定", "position", "left")
+
+SpeedJumpGravity:AddToggle("摄像机锁定", false, onToggleValueChanged)
+SpeedJumpGravity:AddKeybind('2', Enum.KeyCode.E, function(value) end)
+
+local bsuvnbw = PlayerLobby:NewSection("功能", "position", "left")
+
+local function startInfiniteLoop()
+    while infiniteLoopActive do
+        
+        if not infiniteLoopActive then break end
+
+        local args = { [1] = true }
+        pcall(function() 
+            game:GetService("ReplicatedStorage"):WaitForChild("Event"):WaitForChild("waveSkip"):FireServer(unpack(args)) 
+        end)
+
+        task.wait(0.3)
+    end
+end
+
+bsuvnbw:AddToggle("自动跳过", false, function(Value)
+    infiniteLoopActive = Value
+    if Value then
+        
+        loopThread = task.spawn(startInfiniteLoop)
+    else
+      
+        infiniteLoopActive = false
+        if loopThread then
+            loopThread:Cancel()
+            loopThread = nil
+        end
+    end
+end)
+
+bsuvnbw:AddDropdown('选择速度', {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, 3, function(value) selectedValue = tonumber(value) end)
+
+bsuvnbw:AddToggle("启动倍速", false, function(Value)
+    infiniteLoopActive = Value
+    if Value then
+        loopThread = task.spawn(function()
+            while infiniteLoopActive do
+                local args = { [1] = selectedValue }
+                pcall(function() game:GetService("ReplicatedStorage"):WaitForChild("Game"):WaitForChild("Speed"):WaitForChild("Change"):FireServer(unpack(args)) end)
+                task.wait(1)
+            end
+        end)
+    else
+        infiniteLoopActive = false
+        if loopThread then
+            loopThread:Cancel()
+            loopThread = nil
+        end
+    end
+end)
+
+local chatMessageLoopActive = false
+local chatMessageThread
+
+bsuvnbw:AddToggle("自动准备", false, function(Value)
+    chatMessageLoopActive = Value
+    if Value then
+        chatMessageThread = task.spawn(function()
+            while chatMessageLoopActive do
+                pcall(function() game:GetService("ReplicatedStorage"):WaitForChild("GAME_START"):WaitForChild("readyButton"):FireServer(true) end)
+                task.wait(0.5)
+            end
+        end)
+    else
+        chatMessageLoopActive = false
+        if chatMessageThread then
+            chatMessageThread:Cancel()
+            chatMessageThread = nil
+        end
+    end
+end)
+
+local replayCoreLoopActive = false
+local replayCoreThread
+
+bsuvnbw:AddToggle("自动重播", false, function(Value)
+    replayCoreLoopActive = Value
+    if Value then
+        replayCoreThread = task.spawn(function()
+            while replayCoreLoopActive do
+                pcall(function() game:GetService("ReplicatedStorage"):WaitForChild("Event"):WaitForChild("ReplayCore"):FireServer() end)
+                task.wait()
+            end
+        end)
+    else
+        replayCoreLoopActive = false
+        if replayCoreThread then
+            replayCoreThread:Cancel()
+            replayCoreThread = nil
+        end
+    end
+end)
+
+local AboutTab = Window:NewTab("关于", "earth")
+local AboutSection = AboutTab:NewSection("作者YF", "position", "left") 
+local AboutSection = AboutTab:NewSection("欢迎使用", "position", "left") 
+local AboutSection = AboutTab:NewSection("有bug请找作者", "position", "left") 
+local AboutSection = AboutTab:NewSection("测试员dthxwrbbd", "position", "left") 
+local AboutSection = AboutTab:NewSection("别开太多可能会造成卡顿", "position", "left") 
+local AboutSection = AboutTab:NewSection("此脚本免费，禁止圈钱", "position", "left") 
