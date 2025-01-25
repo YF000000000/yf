@@ -1,0 +1,66 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+    Name = "泰坦塔防脚本",
+    Icon = 0, 
+    LoadingTitle = "泰坦塔防脚本",
+    LoadingSubtitle = "by YF制作",
+    Theme = "Default", -- 可在 https://docs.sirius.menu/rayfield/configuration/themes 
+    ConfigurationSaving = {
+        Enabled = true, 
+        FolderName = "TitanTowerDefense", 
+        FileName = "TitanConfig" 
+    },
+    KeySystem = true, 
+    KeySettings = {
+        Title = "卡密验证",
+        Subtitle = "请输入有效的卡密以继续",
+        Note = "获取卡密找本人。",
+        FileName = "KeyFile", 
+        SaveKey = true, 
+        GrabKeyFromSite = false, 
+        Key = {"8650"} 
+    }
+})
+
+local MainTab = Window:CreateTab("娱乐功能", nil)
+
+MainTab:CreateInput({
+    Name = "修改等级",
+    CurrentValue = tostring(game:GetService("Players").LocalPlayer.Data.LevelData.Level.Value),
+    PlaceholderText = "输入数字",
+    RemoveTextAfterFocusLost = false,
+    Flag = "LevelInput",
+    Callback = function(Text)
+        game:GetService("Players").LocalPlayer.Data.LevelData.Level.Value = tonumber(Text)
+    end,
+})
+
+MainTab:CreateInput({
+    Name = "修改宝石",
+    CurrentValue = tostring(game:GetService("Players").LocalPlayer.Data.Gems.Value),
+    PlaceholderText = "输入数字",
+    RemoveTextAfterFocusLost = false,
+    Flag = "GemsInput",
+    Callback = function(Text)
+        game:GetService("Players").LocalPlayer.Data.Gems.Value = tonumber(Text)
+    end,
+})
+
+MainTab:CreateInput({
+    Name = "修改金币",
+    CurrentValue = tostring(game:GetService("Players").LocalPlayer.Data.Coins.Value),
+    PlaceholderText = "输入数字",
+    RemoveTextAfterFocusLost = false,
+    Flag = "CoinsInput",
+    Callback = function(Text)
+        game:GetService("Players").LocalPlayer.Data.Coins.Value = tonumber(Text)
+    end,
+})
+
+local AboutTab = Window:CreateTab("关于", nil)
+AboutTab:CreateSection("YF制作")
+AboutTab:CreateSection("欢迎使用")
+AboutTab:CreateSection("此脚本免费，禁止圈钱")
+
+Rayfield:LoadConfiguration()
