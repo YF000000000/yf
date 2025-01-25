@@ -1,66 +1,25 @@
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/renlua/Script-Tutorial/refs/heads/main/WareUI.lua"))()
+local player = game:GetService("Players").LocalPlayer
 
-local Window = Rayfield:CreateWindow({
-    Name = "泰坦塔防脚本",
-    Icon = 0, 
-    LoadingTitle = "泰坦塔防脚本",
-    LoadingSubtitle = "by YF制作",
-    Theme = "Default", -- 可在 https://docs.sirius.menu/rayfield/configuration/themes 
-    ConfigurationSaving = {
-        Enabled = true, 
-        FolderName = "TitanTowerDefense", 
-        FileName = "TitanConfig" 
-    },
-    KeySystem = true, 
-    KeySettings = {
-        Title = "卡密验证",
-        Subtitle = "请输入有效的卡密以继续",
-        Note = "获取卡密找本人。",
-        FileName = "KeyFile", 
-        SaveKey = true, 
-        GrabKeyFromSite = false, 
-        Key = {"8650"} 
-    }
-})
+local window = library:new("泰坦塔防")
 
-local MainTab = Window:CreateTab("娱乐功能", nil)
+local Tab = window:Tab("没用功能")
 
-MainTab:CreateInput({
-    Name = "修改等级",
-    CurrentValue = tostring(game:GetService("Players").LocalPlayer.Data.LevelData.Level.Value),
-    PlaceholderText = "输入数字",
-    RemoveTextAfterFocusLost = false,
-    Flag = "LevelInput",
-    Callback = function(Text)
-        game:GetService("Players").LocalPlayer.Data.LevelData.Level.Value = tonumber(Text)
-    end,
-})
+local section = Tab:section("修改数据", true)
 
-MainTab:CreateInput({
-    Name = "修改宝石",
-    CurrentValue = tostring(game:GetService("Players").LocalPlayer.Data.Gems.Value),
-    PlaceholderText = "输入数字",
-    RemoveTextAfterFocusLost = false,
-    Flag = "GemsInput",
-    Callback = function(Text)
-        game:GetService("Players").LocalPlayer.Data.Gems.Value = tonumber(Text)
-    end,
-})
+section:Textbox("等级", "", "请输入等级", function(Value)
+    local levelData = player.Data.LevelData.Level
+    levelData.Value = tonumber(Value) 
+end)
 
-MainTab:CreateInput({
-    Name = "修改金币",
-    CurrentValue = tostring(game:GetService("Players").LocalPlayer.Data.Coins.Value),
-    PlaceholderText = "输入数字",
-    RemoveTextAfterFocusLost = false,
-    Flag = "CoinsInput",
-    Callback = function(Text)
-        game:GetService("Players").LocalPlayer.Data.Coins.Value = tonumber(Text)
-    end,
-})
+-- 宝石数量调整文本框
+section:Textbox("宝石数量", "", "请输入宝石数量", function(Value)
+    local gems = player.Data.Gems
+    gems.Value = tonumber(Value) 
+end)
 
-local AboutTab = Window:CreateTab("关于", nil)
-AboutTab:CreateSection("YF制作")
-AboutTab:CreateSection("欢迎使用")
-AboutTab:CreateSection("此脚本免费，禁止圈钱")
-
-Rayfield:LoadConfiguration()
+-- 金币数量调整文本框
+section:Textbox("金币数量", "", "请输入金币数量", function(Value)
+    local coins = player.Data.Coins
+    coins.Value = tonumber(Value) 
+end)
